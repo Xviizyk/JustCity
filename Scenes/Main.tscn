@@ -1,3 +1,21 @@
 [gd_scene format=3 uid="uid://bye1n3l07wwlr"]
 
 [node name="Main" type="Node2D" unique_id=2108407752]
+
+[node name="Canvas" type="CanvasLayer" parent="." unique_id=1805301885]
+
+[node name="Background" type="Control" parent="Canvas" unique_id=1489513930]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundRect" type="ColorRect" parent="Canvas/Background" unique_id=1756524855]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
