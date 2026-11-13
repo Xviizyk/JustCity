@@ -1,5 +1,8 @@
-using System.ComponentModel;
+#nullable enable
+
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Core.File;
 using Core.Save;
 using Godot;
 
@@ -8,18 +11,19 @@ namespace Core;
 public partial class Core : Node
 {
     [ExportGroup("Save System")]
-    [Export] public SaveData[] SaveDataArray;
-    [Export] public ConfigData CurrentConfigData;
-    [Export] public SaveData CurrentSaveData;
+    [Export] public ConfigData CurrentConfigData = null!;
+    [Export] public SaveData CurrentSaveData = null!;
     [Export] public bool IsDebug;
+    [Export] public string SaveDir = "saves/save.svmew";
+    [Export] public string ConfigDir = "config/config.cfgmew";
 
     [ExportGroup("Cursor")]
     [Export] public string CursorFolder = "res://Resources/Textures/Cursor/";
     [Export] public string MinimalisticCursorTextureDir = "MinimalisticCursor.png";
     [Export] public string DefaultCursorTextureDir = "DefaultCursor.png";
 
-    private Resource _defaultCursorTexture;
-    private Resource _minimalisticCursorTexture;
+    private Resource _defaultCursorTexture = null!;
+    private Resource _minimalisticCursorTexture = null!;
 
     public static Core Instance { get; private set; } = null!;
 
@@ -39,6 +43,11 @@ public partial class Core : Node
         ChangeCursor((int)CurrentConfigData.CurrentCursor);
     }
 
+    public override void _ExitTree()
+    {
+        SavePlayerData();
+    }
+
     public override void _Process(double delta)
     {
         secondTimer += delta;
@@ -52,9 +61,17 @@ public partial class Core : Node
 
     private void GetPlayerData()
     {
-        // TODO: Get Savedata and Configdata from files
-        CurrentConfigData = new ConfigData();
-        CurrentSaveData = new SaveData();
+        byte[]? cfgBytes = FileUtils.Load(ConfigDir);
+        byte[]? saveBytes = FileUtils.Load(SaveDir);
+
+        CurrentConfigData = (cfgBytes != null ? GD.BytesToVar(cfgBytes).AsGodotObject() as ConfigData : null) ?? new ConfigData();
+        CurrentSaveData = (saveBytes != null ? GD.BytesToVar(saveBytes).AsGodotObject() as SaveData : null) ?? new SaveData();
+    }
+
+    private void SavePlayerData()
+    {
+        FileUtils.Save(ConfigDir, GD.VarToBytes(CurrentConfigData));
+        FileUtils.Save(SaveDir, GD.VarToBytes(CurrentSaveData));
     }
 
     public void ChangeCursor(int type)

@@ -5,22 +5,7 @@
 [ext_resource type="Script" uid="uid://cawdpn2nqdbvw" path="res://Script/Level/Interface/Interface.cs" id="2_si664"]
 [ext_resource type="Script" uid="uid://b0bvn50ostltu" path="res://Script/Level/TestThings/TestBalance.cs" id="3_r12ga"]
 
-[sub_resource type="Gradient" id="Gradient_irs26"]
-offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0.8474744, 0.84747446, 0.84747446, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_4b61c"]
-gradient = SubResource("Gradient_irs26")
-width = 1
-
 [node name="Level" type="Node2D" unique_id=1412152226]
-
-[node name="Background" type="Node2D" parent="." unique_id=1781296834]
-
-[node name="BackgroundSprite" type="Sprite2D" parent="Background" unique_id=164752722]
-position = Vector2(960, 540)
-scale = Vector2(1920, 1080)
-texture = SubResource("GradientTexture1D_4b61c")
 
 [node name="Player" type="Node2D" parent="." unique_id=62520708]
 
@@ -67,8 +52,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -41.5
-offset_top = -62.0
+offset_top = -118.0
 offset_right = 41.5
+offset_bottom = -56.0
 grow_horizontal = 2
 grow_vertical = 0
 
