@@ -8,6 +8,7 @@ public partial class ConfigData : Resource
     [ExportGroup("Movement")]
     [Export] public bool LBMMovement { get; set; }
     [Export] public bool SmoothMovement { get; set; }
+    [Export] public CursorType CurrentCursor = 0;
 
     public ConfigData(bool lbmMovement, bool smoothMovement)
     {
@@ -18,6 +19,13 @@ public partial class ConfigData : Resource
     public ConfigData()
     {
         LBMMovement = true;
-        SmoothMovement = false;
+        SmoothMovement = true;
+    }
+
+    public enum CursorType
+    {
+        Default = 0,
+        Minimalistic,
+        User
     }
 }

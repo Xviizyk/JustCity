@@ -17,7 +17,7 @@ public partial class Movement : Node
     private bool _smoothMovement = true;
     private bool _isDragging = false;
 
-    private float _currentZoomLevel;
+    private float _currentZoomLevel = 1.0f;
     private float _larpZoomLevel = 1.0f;
 
     private Vector2 _targetPosition;
@@ -29,6 +29,7 @@ public partial class Movement : Node
         _smoothMovement = cd.SmoothMovement;
         _leftMain = cd.LBMMovement;
         Camera.Position = sd.Position;
+        Camera.Zoom = sd.Zoom;
         _targetPosition = sd.Position;
     }
 
@@ -38,6 +39,7 @@ public partial class Movement : Node
         SmoothZoom(delta);
 
         Core.Core.Instance.CurrentSaveData.Position = Camera.Position;
+        Core.Core.Instance.CurrentSaveData.Zoom = Camera.Zoom;
     }
 
     public override void _Input(InputEvent @event)
@@ -66,8 +68,8 @@ public partial class Movement : Node
 
         if (@event is InputEventMouseButton mb && mb.Pressed)
         {
-            if (mb.ButtonIndex == MouseButton.WheelUp) _zoomLevel = Math.Clamp(_zoomLevel + 1, 1, ZoomLevels);
-            if (mb.ButtonIndex == MouseButton.WheelDown) _zoomLevel = Math.Clamp(_zoomLevel - 1, 1, ZoomLevels);
+            if (mb.ButtonIndex == MouseButton.WheelUp) _larpZoomLevel = Math.Clamp(_larpZoomLevel + 1, 1, ZoomLevels);
+            if (mb.ButtonIndex == MouseButton.WheelDown) _larpZoomLevel = Math.Clamp(_larpZoomLevel - 1, 1, ZoomLevels);
         }
     }
 

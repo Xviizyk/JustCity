@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://d1i3eh32ja61f"]
 
 [ext_resource type="Script" uid="uid://c4vjek534w2uv" path="res://Script/Level/Movement/Movement.cs" id="1_huuhb"]
+[ext_resource type="Theme" uid="uid://s48o8hxntjog" path="res://Resources/Themes/HUD/Balance.tres" id="2_7gcn6"]
+[ext_resource type="Script" uid="uid://cawdpn2nqdbvw" path="res://Script/Level/Interface/Interface.cs" id="2_si664"]
+[ext_resource type="Script" uid="uid://b0bvn50ostltu" path="res://Script/Level/TestThings/TestBalance.cs" id="3_r12ga"]
 
 [sub_resource type="Gradient" id="Gradient_irs26"]
 offsets = PackedFloat32Array(0)
@@ -26,3 +29,53 @@ script = ExtResource("1_huuhb")
 Camera = NodePath("../Camera2D")
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1305372983]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Player" unique_id=1874949543 node_paths=PackedStringArray("BalanceLabel")]
+script = ExtResource("2_si664")
+BalanceLabel = NodePath("HUD/Balancelabel")
+
+[node name="HUD" type="Control" parent="Player/CanvasLayer" unique_id=343924598]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Balancelabel" type="Label" parent="Player/CanvasLayer/HUD" unique_id=750794251]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -23.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("2_7gcn6")
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Player/CanvasLayer/HUD" unique_id=1243816718]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -41.5
+offset_top = -62.0
+offset_right = 41.5
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Buttons" type="Control" parent="Player/CanvasLayer/HUD" unique_id=1745328095]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Test" type="Node" parent="." unique_id=875893446]
+script = ExtResource("3_r12ga")
