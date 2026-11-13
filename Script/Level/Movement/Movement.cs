@@ -6,8 +6,9 @@ namespace Level.Movement;
 
 public partial class Movement : Node
 {
-    [ExportGroup("Mouse control")]
-    [Export] public float SmoothSpeed = 12.0f;
+    [ExportGroup("Control")]
+    [Export] public float MovingSmoothSpeed = 12.0f;
+    [Export] public float ZoomingSmoothSpeed = 12.0f;
     [Export] public float ZoomPower = 0.85f;
     [Export] public int ZoomLevels = 20;
     [Export] public Camera2D Camera;
@@ -16,7 +17,8 @@ public partial class Movement : Node
     private bool _smoothMovement = true;
     private bool _isDragging = false;
 
-    private int _zoomLevel = 1;
+    private float _currentZoomLevel;
+    private float _larpZoomLevel = 1.0f;
 
     private Vector2 _targetPosition;
 
@@ -33,8 +35,8 @@ public partial class Movement : Node
     public override void _Process(double delta)
     {
         SmoothMove(delta);
-        float z = Mathf.Pow(ZoomPower, ZoomLevels - _zoomLevel);
-        Camera.Zoom = new Vector2(z, z);
+        SmoothZoom(delta);
+
         Core.Core.Instance.CurrentSaveData.Position = Camera.Position;
     }
 
@@ -72,7 +74,23 @@ public partial class Movement : Node
     private void SmoothMove(double delta)
     {
         if (!_smoothMovement || !_isDragging && Camera.Position.IsEqualApprox(_targetPosition)) return;
-        float l = 1.0f - Mathf.Exp(-SmoothSpeed * (float)delta);
+        float l = 1.0f - Mathf.Exp(-MovingSmoothSpeed * (float)delta);
         Camera.Position = Camera.Position.Lerp(_targetPosition, l);
+    }
+
+    private void SmoothZoom(double delta)
+    {
+        if (!_smoothMovement)
+        {
+            _currentZoomLevel = _larpZoomLevel;
+        }
+        else
+        {
+            float l = 1.0f - Mathf.Exp(-ZoomingSmoothSpeed * (float)delta);
+            _currentZoomLevel = Mathf.Lerp(_currentZoomLevel, _larpZoomLevel, l);
+        }
+
+        float z = Mathf.Pow(ZoomPower, ZoomLevels - _currentZoomLevel);
+        Camera.Zoom = new Vector2(z, z);
     }
 }
