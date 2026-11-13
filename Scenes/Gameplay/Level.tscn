@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://d1i3eh32ja61f"]
 
+[ext_resource type="Script" uid="uid://c4vjek534w2uv" path="res://Script/Level/Movement/Movement.cs" id="1_huuhb"]
+
 [sub_resource type="Gradient" id="Gradient_irs26"]
 offsets = PackedFloat32Array(0)
 colors = PackedColorArray(0.8474744, 0.84747446, 0.84747446, 1)
@@ -12,7 +14,15 @@ width = 1
 
 [node name="Background" type="Node2D" parent="." unique_id=1781296834]
 
-[node name="Sprite2D" type="Sprite2D" parent="Background" unique_id=164752722]
+[node name="BackgroundSprite" type="Sprite2D" parent="Background" unique_id=164752722]
 position = Vector2(960, 540)
 scale = Vector2(1920, 1080)
 texture = SubResource("GradientTexture1D_4b61c")
+
+[node name="Player" type="Node2D" parent="." unique_id=62520708]
+
+[node name="Movement" type="Node" parent="Player" unique_id=477322881 node_paths=PackedStringArray("Camera")]
+script = ExtResource("1_huuhb")
+Camera = NodePath("../Camera2D")
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1305372983]

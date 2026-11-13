@@ -17,7 +17,7 @@ public partial class ConfigData : Resource
 
     public ConfigData()
     {
-        LBMMovement = false;
-        SmoothMovement = true;
+        LBMMovement = true;
+        SmoothMovement = false;
     }
 }

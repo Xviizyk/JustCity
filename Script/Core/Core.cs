@@ -21,7 +21,9 @@ public partial class Core : Node
         Instance = this;
 
         string[] args = OS.GetCmdlineArgs();
-        if (args.Contains("D01") || args.Contains("d01")) IsDebug = true;
+        if (args.Contains("_debug") || args.Contains("__DEBUG")) IsDebug = true;
+
+        GetPlayerData();
     }
 
     public override void _PhysicsProcess(double delta)
@@ -33,5 +35,12 @@ public partial class Core : Node
             CurrentSaveData.PlayTime.UpdateTime();
             secondTimer = 0.0;
         }
+    }
+
+    private void GetPlayerData()
+    {
+        // TODO: Get Savedata and Configdata from files
+        CurrentConfigData = new ConfigData();
+        CurrentSaveData = new SaveData();
     }
 }
