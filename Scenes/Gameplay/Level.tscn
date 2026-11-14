@@ -1,13 +1,20 @@
 [gd_scene format=3 uid="uid://d1i3eh32ja61f"]
 
-[ext_resource type="Script" uid="uid://c4vjek534w2uv" path="res://Script/Level/Movement/Movement.cs" id="1_huuhb"]
+[ext_resource type="Script" path="res://Script/Level/Player/Movement.cs" id="1_huuhb"]
+[ext_resource type="Script" uid="uid://c2fvwxeio5x8o" path="res://Script/Level/Player/InputHandler.cs" id="1_s8u2f"]
 [ext_resource type="Theme" uid="uid://s48o8hxntjog" path="res://Resources/Themes/HUD/Balance.tres" id="2_7gcn6"]
 [ext_resource type="Script" uid="uid://cawdpn2nqdbvw" path="res://Script/Level/Interface/Interface.cs" id="2_si664"]
 [ext_resource type="Script" uid="uid://b0bvn50ostltu" path="res://Script/Level/TestThings/TestBalance.cs" id="3_r12ga"]
+[ext_resource type="Script" uid="uid://cgq0i8w6p1bsc" path="res://Script/Level/Building/RoadBuilder.cs" id="5_toi0n"]
 
 [node name="Level" type="Node2D" unique_id=1412152226]
 
 [node name="Player" type="Node2D" parent="." unique_id=62520708]
+
+[node name="Input" type="Node" parent="Player" unique_id=1461211064 node_paths=PackedStringArray("PlayerMovement", "Builder")]
+script = ExtResource("1_s8u2f")
+PlayerMovement = NodePath("../Movement")
+Builder = NodePath("../../Builder")
 
 [node name="Movement" type="Node" parent="Player" unique_id=477322881 node_paths=PackedStringArray("Camera")]
 script = ExtResource("1_huuhb")
@@ -65,3 +72,7 @@ offset_bottom = 40.0
 
 [node name="Test" type="Node" parent="." unique_id=875893446]
 script = ExtResource("3_r12ga")
+
+[node name="Builder" type="Node2D" parent="." unique_id=257521052 node_paths=PackedStringArray("Roads")]
+script = ExtResource("5_toi0n")
+Roads = []

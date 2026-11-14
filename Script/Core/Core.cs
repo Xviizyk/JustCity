@@ -1,12 +1,12 @@
 #nullable enable
 
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Core.File;
-using Core.Save;
+using System.Text;
 using Godot;
+using JustCity.Script.Core.Save;
+using JustCity.Script.Core.Utils;
 
-namespace Core;
+namespace JustCity.Script.Core;
 
 public partial class Core : Node
 {
@@ -39,6 +39,8 @@ public partial class Core : Node
         string[] args = OS.GetCmdlineArgs();
         if (args.Contains("_debug") || args.Contains("__DEBUG")) IsDebug = true;
 
+        if (IsDebug) GD.Print("Game is in debug mode");
+
         GetPlayerData();
         ChangeCursor((int)CurrentConfigData.CurrentCursor);
     }
@@ -64,14 +66,17 @@ public partial class Core : Node
         byte[]? cfgBytes = FileUtils.Load(ConfigDir);
         byte[]? saveBytes = FileUtils.Load(SaveDir);
 
-        CurrentConfigData = (cfgBytes != null ? GD.BytesToVar(cfgBytes).AsGodotObject() as ConfigData : null) ?? new ConfigData();
-        CurrentSaveData = (saveBytes != null ? GD.BytesToVar(saveBytes).AsGodotObject() as SaveData : null) ?? new SaveData();
+        CurrentConfigData = new ConfigData();
+        CurrentSaveData = new SaveData();
+
+        if (cfgBytes != null) ReflectSave.FillFromJson(CurrentConfigData, Encoding.UTF8.GetString(cfgBytes));
+        if (saveBytes != null) ReflectSave.FillFromJson(CurrentSaveData, Encoding.UTF8.GetString(saveBytes));
     }
 
     private void SavePlayerData()
     {
-        FileUtils.Save(ConfigDir, GD.VarToBytes(CurrentConfigData));
-        FileUtils.Save(SaveDir, GD.VarToBytes(CurrentSaveData));
+        FileUtils.Save(ConfigDir, Encoding.UTF8.GetBytes(ReflectSave.ToJson(CurrentConfigData)));
+        FileUtils.Save(SaveDir, Encoding.UTF8.GetBytes(ReflectSave.ToJson(CurrentSaveData)));
     }
 
     public void ChangeCursor(int type)

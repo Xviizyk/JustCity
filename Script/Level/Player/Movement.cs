@@ -1,21 +1,27 @@
 using System;
-using Core.Save;
 using Godot;
+using JustCity.Script.Core.Save;
 
-namespace Level.Movement;
+namespace JustCity.Script.Level.Player;
 
 public partial class Movement : Node
 {
-    [ExportGroup("Control")]
+    [ExportGroup("Nodes")]
+    [Export] public Camera2D Camera;
+
+    [ExportGroup("Settings")]
     [Export] public float MovingSmoothSpeed = 12.0f;
     [Export] public float ZoomingSmoothSpeed = 12.0f;
     [Export] public float ZoomPower = 0.85f;
     [Export] public int ZoomLevels = 20;
-    [Export] public Camera2D Camera;
 
-    private bool _leftMain = true;
+    [ExportGroup("Flags")]
+    [Export] public bool LBMIsMain = true;
+    [Export] public bool IsMoving = false;
+    [Export] public bool CanMove = true;
+    [Export] public bool CanZoom = true;
+
     private bool _smoothMovement = true;
-    private bool _isDragging = false;
 
     private float _currentZoomLevel = 1.0f;
     private float _larpZoomLevel = 1.0f;
@@ -27,7 +33,7 @@ public partial class Movement : Node
         ConfigData cd = Core.Core.Instance.CurrentConfigData;
         SaveData sd = Core.Core.Instance.CurrentSaveData;
         _smoothMovement = cd.SmoothMovement;
-        _leftMain = cd.LBMMovement;
+        LBMIsMain = cd.LBMMovement;
         Camera.Position = sd.Position;
         Camera.Zoom = sd.Zoom;
         _targetPosition = sd.Position;
@@ -35,47 +41,34 @@ public partial class Movement : Node
 
     public override void _Process(double delta)
     {
-        SmoothMove(delta);
-        SmoothZoom(delta);
+        if (CanMove) SmoothMove(delta);
+        if (CanZoom) SmoothZoom(delta);
 
         Core.Core.Instance.CurrentSaveData.Position = Camera.Position;
         Core.Core.Instance.CurrentSaveData.Zoom = Camera.Zoom;
     }
 
-    public override void _Input(InputEvent @event)
+    public void MoveCamera(InputEventMouseMotion motion)
     {
-        if (_leftMain ? @event.IsActionPressed("Left") : @event.IsActionPressed("Right"))
-        {
-            _isDragging = true;
-        }
+        Vector2 move = motion.Relative / Camera.Zoom;
 
-        if (_leftMain ? @event.IsActionReleased("Left") : @event.IsActionReleased("Right"))
+        if (_smoothMovement) _targetPosition -= move;
+        else
         {
-            _isDragging = false;
+            Camera.Position -= move;
+            _targetPosition = Camera.Position;
         }
+    }
 
-        if (_isDragging && @event is InputEventMouseMotion motion)
-        {
-            Vector2 move = motion.Relative / Camera.Zoom;
-
-            if (_smoothMovement) _targetPosition -= move;
-            else
-            {
-                Camera.Position -= move;
-                _targetPosition = Camera.Position;
-            }
-        }
-
-        if (@event is InputEventMouseButton mb && mb.Pressed)
-        {
-            if (mb.ButtonIndex == MouseButton.WheelUp) _larpZoomLevel = Math.Clamp(_larpZoomLevel + 1, 1, ZoomLevels);
-            if (mb.ButtonIndex == MouseButton.WheelDown) _larpZoomLevel = Math.Clamp(_larpZoomLevel - 1, 1, ZoomLevels);
-        }
+    public void Zoom(InputEventMouseButton mb)
+    {
+        if (mb.ButtonIndex == MouseButton.WheelUp) _larpZoomLevel = Math.Clamp(_larpZoomLevel + 1, 1, ZoomLevels);
+        if (mb.ButtonIndex == MouseButton.WheelDown) _larpZoomLevel = Math.Clamp(_larpZoomLevel - 1, 1, ZoomLevels);
     }
 
     private void SmoothMove(double delta)
     {
-        if (!_smoothMovement || !_isDragging && Camera.Position.IsEqualApprox(_targetPosition)) return;
+        if (!_smoothMovement || !IsMoving && Camera.Position.IsEqualApprox(_targetPosition)) return;
         float l = 1.0f - Mathf.Exp(-MovingSmoothSpeed * (float)delta);
         Camera.Position = Camera.Position.Lerp(_targetPosition, l);
     }

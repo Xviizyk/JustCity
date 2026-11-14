@@ -1,7 +1,6 @@
-using System.Runtime.InteropServices;
 using Godot;
 
-namespace Core.Save;
+namespace JustCity.Script.Core.Save;
 
 public static partial class Save
 {

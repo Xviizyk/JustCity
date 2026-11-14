@@ -2,7 +2,7 @@ using System;
 using System.Dynamic;
 using Godot;
 
-namespace Core.Save;
+namespace JustCity.Script.Core.Save;
 
 [GlobalClass]
 public partial class GameTime : Resource

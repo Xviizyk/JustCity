@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Level.Interface;
+namespace JustCity.Script.Level.Interface;
 
 public partial class Interface : CanvasLayer
 {

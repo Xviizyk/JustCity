@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using Godot;
 
-namespace Core.Utils;
+namespace JustCity.Script.Core.Utils;
 
 public static class Utils
 {

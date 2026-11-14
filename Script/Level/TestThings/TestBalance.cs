@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Level.TestThings;
+namespace JustCity.Script.Level.TestThings;
 
 public partial class TestBalance : Node
 {

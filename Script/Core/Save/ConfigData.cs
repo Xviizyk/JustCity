@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Core.Save;
+namespace JustCity.Script.Core.Save;
 
 [GlobalClass]
 public partial class ConfigData : Resource

@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using RandomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator;
 
-namespace Core.File;
+namespace JustCity.Script.Core.Utils;
 
 public static class FileUtils
 {
@@ -40,7 +40,7 @@ public static class FileUtils
         string? dir = Path.GetDirectoryName(full);
         if (string.IsNullOrEmpty(dir)) throw new InvalidOperationException("File is corrupted");
         Directory.CreateDirectory(dir);
-        return new FileStream(full, FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.Read);
+        return new FileStream(full, FileMode.Append, System.IO.FileAccess.Write, FileShare.Read);
     }
 
     public static string GetFullPath(string path) => Resolve(path);
@@ -49,19 +49,19 @@ public static class FileUtils
     {
         string fullFrom = Resolve(from);
         string fullTo = Resolve(to);
-        if (!System.IO.File.Exists(fullFrom)) return;
+        if (!File.Exists(fullFrom)) return;
         string? dir = Path.GetDirectoryName(fullTo);
         if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
-        System.IO.File.Move(fullFrom, fullTo, overwrite);
+        File.Move(fullFrom, fullTo, overwrite);
     }
 
-    public static bool Exists(string path) => System.IO.File.Exists(Resolve(path));
+    public static bool Exists(string path) => File.Exists(Resolve(path));
 
     public static byte[]? Load(string path)
     {
         string full = Resolve(path);
-        if (!System.IO.File.Exists(full)) return null;
-        byte[] data = System.IO.File.ReadAllBytes(full);
+        if (!File.Exists(full)) return null;
+        byte[] data = File.ReadAllBytes(full);
         if (!data.AsSpan().StartsWith(Magic)) return data;
         return Decrypt(data.AsSpan(Magic.Length));
     }
@@ -79,16 +79,16 @@ public static class FileUtils
             byte[] payload = new byte[Magic.Length + NonceSize + TagSize + data.Length];
             Magic.CopyTo(payload, 0);
             Encrypt(data, payload.AsSpan(Magic.Length));
-            System.IO.File.WriteAllBytes(tmp, payload);
+            File.WriteAllBytes(tmp, payload);
         }
-        else System.IO.File.WriteAllBytes(tmp, data);
-        System.IO.File.Move(tmp, full, true);
+        else File.WriteAllBytes(tmp, data);
+        File.Move(tmp, full, true);
     }
 
     public static void Delete(string path)
     {
         string full = Resolve(path);
-        if (System.IO.File.Exists(full)) System.IO.File.Delete(full);
+        if (File.Exists(full)) File.Delete(full);
     }
 
     private static void Encrypt(ReadOnlySpan<byte> plain, Span<byte> destination)
