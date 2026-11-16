@@ -6,24 +6,18 @@ namespace JustCity.Script.Core.Save;
 public partial class Version : Resource
 {
     [ExportGroup("Version data")]
-    [Export] public int Minor = 0;
     [Export] public int Major = 0;
+    [Export] public int Minor = 0;
     [Export] public int Patch = 0;
-    [Export] public string Type = "a";
+    [Export] public string Type = "unknown";
 
-    public Version(int minor, int major, int patch, string type = "")
+    public Version(int major, int minor, int patch, string type = "")
     {
-        Minor = minor;
         Major = major;
+        Minor = minor;
         Patch = patch;
         Type = type;
     }
 
-    public Version()
-    {
-        Minor = 0;
-        Major = 0;
-        Patch = 0;
-        Type = "unknown";
-    }
+    public Version() {}
 }

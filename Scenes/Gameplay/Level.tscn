@@ -73,6 +73,5 @@ offset_bottom = 40.0
 [node name="Test" type="Node" parent="." unique_id=875893446]
 script = ExtResource("3_r12ga")
 
-[node name="Builder" type="Node2D" parent="." unique_id=257521052 node_paths=PackedStringArray("Roads")]
+[node name="Builder" type="Node2D" parent="." unique_id=257521052]
 script = ExtResource("5_toi0n")
-Roads = []

@@ -6,7 +6,10 @@ uid="uid://dhgpey2dcwbk2"
 
 [deps]
 
+files=["res://Resources/Text/Translation/Core/Save.ru.translation", "res://Resources/Text/Translation/Core/Save.en.translation"]
+
 source_file="res://Resources/Text/Translation/Core/Save.csv"
+dest_files=["res://Resources/Text/Translation/Core/Save.ru.translation", "res://Resources/Text/Translation/Core/Save.en.translation"]
 
 [params]
 

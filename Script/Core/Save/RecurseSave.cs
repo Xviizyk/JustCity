@@ -83,10 +83,10 @@ public static class ReflectSave
         if (o is string s) return s;
         if (o is Vector2 v) return new Godot.Collections.Dictionary { ["x"] = v.X, ["y"] = v.Y };
         if (o is Resource r) return ToDict(r);
-        if (o is IList list)
+        if (o is IEnumerable en && o is not string)
         {
             Godot.Collections.Array array = new Godot.Collections.Array();
-            foreach (object item in list)
+            foreach (object item in en)
             {
                 array.Add(ToVariant(item));
             }
@@ -117,6 +117,18 @@ public static class ReflectSave
             Resource r = (Resource)Activator.CreateInstance(t)!;
             FromDict(r, v.AsGodotDictionary());
             return r;
+        }
+
+        if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Godot.Collections.Array<>))
+        {
+            Type e = t.GetGenericArguments()[0];
+            object list = Activator.CreateInstance(t)!;
+            MethodInfo add = t.GetMethod("Add", new[] { e })!;
+            foreach (Variant item in v.AsGodotArray())
+            {
+                add.Invoke(list, new[] { FromVariant(item, e) });
+            }
+            return list;
         }
 
         if (t.IsArray)

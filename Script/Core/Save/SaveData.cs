@@ -6,12 +6,12 @@ namespace JustCity.Script.Core.Save;
 [GlobalClass]
 public partial class SaveData : Resource
 {
-    [Export] public Version Version { get; private set; }
-    [Export] public GameTime PlayTime { get; private set; }
-    [Export] public Vector2 Position { get; set; }
-    [Export] public Vector2 Zoom { get; set; }
-    [Export] public float Balance { get; set; }
-    [Export] public RoadNetwork RoadNetwork { get; set; }
+    [Export] public Version Version { get; private set; } = new Version();
+    [Export] public GameTime PlayTime { get; private set; } = new GameTime();
+    [Export] public Vector2 Position { get; set; } = new Vector2(0, 0);
+    [Export] public Vector2 Zoom { get; set; } = new Vector2(1, 1);
+    [Export] public float Balance { get; set; } = 0.0f;
+    [Export] public RoadNetwork RoadNetwork { get; set; } = new RoadNetwork();
 
     public SaveData(Version version, GameTime playtime, Vector2 position, Vector2 zoom, float balance, RoadNetwork roadNetwork)
     {
@@ -23,13 +23,5 @@ public partial class SaveData : Resource
         RoadNetwork = roadNetwork ?? new RoadNetwork();
     }
 
-    public SaveData()
-    {
-        Version = new Version();
-        PlayTime = new GameTime();
-        Position = new Vector2(0, 0);
-        Zoom = new Vector2(1, 1);
-        Balance = 0.0f;
-        RoadNetwork = new RoadNetwork();
-    }
+    public SaveData() {}
 }

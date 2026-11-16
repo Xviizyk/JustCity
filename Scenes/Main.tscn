@@ -1,21 +1,29 @@
 [gd_scene format=3 uid="uid://bye1n3l07wwlr"]
 
-[node name="Main" type="Node2D" unique_id=2108407752]
+[ext_resource type="PackedScene" uid="uid://d1i3eh32ja61f" path="res://Scenes/Gameplay/Level.tscn" id="1_level"]
 
-[node name="Canvas" type="CanvasLayer" parent="." unique_id=1805301885]
+[node name="Main" type="Node2D"]
 
-[node name="Background" type="Control" parent="Canvas" unique_id=1489513930]
+[node name="Canvas" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Background" type="Control" parent="Canvas"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="BackgroundRect" type="ColorRect" parent="Canvas/Background" unique_id=1756524855]
+[node name="BackgroundRect" type="ColorRect" parent="Canvas/Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+color = Color(0.78, 0.85, 0.78, 1)
+
+[node name="Level" parent="." instance=ExtResource("1_level")]

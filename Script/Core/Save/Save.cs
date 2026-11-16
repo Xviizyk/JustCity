@@ -14,7 +14,7 @@ public static partial class Save
     public static Variant GetField(StringName field)
     {
         Core core = Core.Instance;
-        Variant value = core.Get(field);
+        Variant value = core.CurrentSaveData.Get(field);
         if (core.IsDebug) GD.Print($"[SAVE | GetField | INFO] Got {field}: {value}");
         return value;
     }

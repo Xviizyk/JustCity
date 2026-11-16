@@ -14,6 +14,8 @@ public partial class GameTime : Resource
     [Export] public int Seconds { get; private set; } = 0;
     [Export] public long RawTime { get; private set; } = 0;
 
+    public GameTime() {}
+
     public void UpdateTime()
     {
         RawTime++;
