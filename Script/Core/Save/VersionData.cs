@@ -20,4 +20,16 @@ public partial class Version : Resource
     }
 
     public Version() {}
+
+    public static Version FromEngine()
+    {
+        var info = Engine.GetVersionInfo();
+
+        return new Version(
+            info["major"].AsInt32(),
+            info["minor"].AsInt32(),
+            info["patch"].AsInt32(),
+            info["status"].AsString()
+        );
+    }
 }

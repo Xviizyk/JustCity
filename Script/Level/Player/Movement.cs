@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using JustCity.Script.Core;
 using JustCity.Script.Core.Save;
 
 namespace JustCity.Script.Level.Player;
@@ -8,6 +9,7 @@ public partial class Movement : Node
 {
     [ExportGroup("Nodes")]
     [Export] public Camera2D Camera;
+    [Export] public InputHandler InputHandlerer;
 
     [ExportGroup("Settings")]
     [Export] public float MovingSmoothSpeed = 12.0f;
@@ -15,6 +17,7 @@ public partial class Movement : Node
     [Export] public float KeyboardSpeed = 700.0f;
     [Export] public float ZoomPower = 0.85f;
     [Export] public int ZoomLevels = 20;
+    [Export] public string Direction;
 
     [ExportGroup("Inertia")]
     [Export] public bool UseInertia = true;
@@ -47,8 +50,8 @@ public partial class Movement : Node
 
     public override void _Ready()
     {
-        ConfigData cd = Core.Core.Instance.CurrentConfigData;
-        SaveData sd = Core.Core.Instance.CurrentSaveData;
+        ConfigData cd = this.CurrentConfigData();
+        SaveData sd = this.CurrentSaveData();
         _smoothMovement = cd.SmoothMovement;
         LBMIsMain = cd.LBMMovement;
         Camera.Position = sd.Position;
@@ -72,8 +75,8 @@ public partial class Movement : Node
         }
         if (CanZoom) SmoothZoom(delta);
 
-        Core.Core.Instance.CurrentSaveData.Position = Camera.Position;
-        Core.Core.Instance.CurrentSaveData.Zoom = Camera.Zoom;
+        this.CurrentSaveData().Position = Camera.Position;
+        this.CurrentSaveData().Zoom = Camera.Zoom;
     }
 
     public void MoveCamera(InputEventMouseMotion motion)
@@ -126,14 +129,14 @@ public partial class Movement : Node
     private void KeyboardMove(double delta)
     {
         Vector2 dir = Vector2.Zero;
-        if (Input.IsKeyPressed(Key.W) || Input.IsKeyPressed(Key.Up)) dir.Y -= 1f;
-        if (Input.IsKeyPressed(Key.S) || Input.IsKeyPressed(Key.Down)) dir.Y += 1f;
-        if (Input.IsKeyPressed(Key.A) || Input.IsKeyPressed(Key.Left)) dir.X -= 1f;
-        if (Input.IsKeyPressed(Key.D) || Input.IsKeyPressed(Key.Right)) dir.X += 1f;
-        if (dir == Vector2.Zero) return;
+        if (Direction == "None") return;
+        if (Direction == "Up") dir.Y -= 1f;
+        else if (Direction == "Down") dir.Y += 1f;
+        if (Direction == "Left") dir.X -= 1f;
+        else if (Direction == "Right") dir.X += 1f;
 
         _inertia = Vector2.Zero;
-        float speed = KeyboardSpeed * (Input.IsKeyPressed(Key.Shift) ? 2.5f : 1f);
+        float speed = KeyboardSpeed * (InputHandlerer.IsShifting ? 2.5f : 1f);
         Vector2 move = dir.Normalized() * speed * (float)delta / Camera.Zoom.X;
         if (_smoothMovement) _targetPosition += move;
         else

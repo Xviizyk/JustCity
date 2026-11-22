@@ -1,4 +1,5 @@
 using Godot;
+using JustCity.Script.Core;
 
 namespace JustCity.Script.Level.Interface;
 
@@ -19,7 +20,7 @@ public partial class Interface : CanvasLayer
         if (_balanceRefreshTimer >= BalanceRefreshTimeout)
         {
             _balanceRefreshTimer = 0.0;
-            BalanceLabel.Text = Core.Core.Instance.CurrentSaveData.Balance.ToString("0");
+            BalanceLabel.Text = this.CurrentSaveData().Balance.ToString("0");
         }
     }
 }

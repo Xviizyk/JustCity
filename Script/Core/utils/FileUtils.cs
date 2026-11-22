@@ -62,6 +62,11 @@ public static class FileUtils
         string full = Resolve(path);
         if (!File.Exists(full)) return null;
         byte[] data = File.ReadAllBytes(full);
+        if (Core.Instance.IsDebug)
+        {
+            string content = Encoding.UTF8.GetString(data);
+            GD.Print(content);
+        }
         if (!data.AsSpan().StartsWith(Magic)) return data;
         return Decrypt(data.AsSpan(Magic.Length));
     }

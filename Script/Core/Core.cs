@@ -47,6 +47,7 @@ public partial class Core : Node
 
     public override void _ExitTree()
     {
+        CurrentSaveData.Version = Version.FromEngine();
         SavePlayerData();
     }
 

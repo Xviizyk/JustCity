@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://d1i3eh32ja61f"]
 
-[ext_resource type="Script" path="res://Script/Level/Player/Movement.cs" id="1_huuhb"]
+[ext_resource type="Script" uid="uid://c4vjek534w2uv" path="res://Script/Level/Player/Movement.cs" id="1_huuhb"]
 [ext_resource type="Script" uid="uid://c2fvwxeio5x8o" path="res://Script/Level/Player/InputHandler.cs" id="1_s8u2f"]
 [ext_resource type="Theme" uid="uid://s48o8hxntjog" path="res://Resources/Themes/HUD/Balance.tres" id="2_7gcn6"]
 [ext_resource type="Script" uid="uid://cawdpn2nqdbvw" path="res://Script/Level/Interface/Interface.cs" id="2_si664"]
-[ext_resource type="Script" uid="uid://b0bvn50ostltu" path="res://Script/Level/TestThings/TestBalance.cs" id="3_r12ga"]
-[ext_resource type="Script" uid="uid://cgq0i8w6p1bsc" path="res://Script/Level/Building/RoadBuilder.cs" id="5_toi0n"]
+[ext_resource type="Script" uid="uid://c3jknvbgnyw30" path="res://Script/Level/TestThings/TestSomething.cs" id="5_8qrfl"]
+[ext_resource type="Script" uid="uid://bhhg8vyt204kx" path="res://Script/Level/Building/Road/Tool/RoadBuilder.cs" id="5_toi0n"]
+[ext_resource type="Script" uid="uid://cd7mo73ei4eq5" path="res://Script/Level/Building/Road/View/RoadRenderer.cs" id="6_rend"]
+[ext_resource type="Script" uid="uid://bolar2taqb4gm" path="res://Script/Level/Building/Road/View/RoadOverlay.cs" id="7_over"]
 
 [node name="Level" type="Node2D" unique_id=1412152226]
 
@@ -16,9 +18,10 @@ script = ExtResource("1_s8u2f")
 PlayerMovement = NodePath("../Movement")
 Builder = NodePath("../../Builder")
 
-[node name="Movement" type="Node" parent="Player" unique_id=477322881 node_paths=PackedStringArray("Camera")]
+[node name="Movement" type="Node" parent="Player" unique_id=477322881 node_paths=PackedStringArray("Camera", "InputHandlerer")]
 script = ExtResource("1_huuhb")
 Camera = NodePath("../Camera2D")
+InputHandlerer = NodePath("../Input")
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1305372983]
 
@@ -70,8 +73,49 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Test" type="Node" parent="." unique_id=875893446]
-script = ExtResource("3_r12ga")
-
-[node name="Builder" type="Node2D" parent="." unique_id=257521052]
+[node name="Builder" type="Node2D" parent="." unique_id=257521052 node_paths=PackedStringArray("Renderer", "Overlay", "InputHandlerer")]
 script = ExtResource("5_toi0n")
+Renderer = NodePath("Renderer")
+Overlay = NodePath("Overlay")
+InputHandlerer = NodePath("../Player/Input")
+
+[node name="Renderer" type="Node2D" parent="Builder" unique_id=522849371]
+script = ExtResource("6_rend")
+ShowDebug = true
+
+[node name="Overlay" type="Node2D" parent="Builder" unique_id=1692224129 node_paths=PackedStringArray("Builder", "InfoLabel", "ErrorLabel", "LevelLabel", "HintLabel")]
+script = ExtResource("7_over")
+Builder = NodePath("..")
+InfoLabel = NodePath("../Texts/Info")
+ErrorLabel = NodePath("../Texts/Error")
+LevelLabel = NodePath("../Texts/Level")
+HintLabel = NodePath("../Texts/Hint")
+
+[node name="Texts" type="CanvasLayer" parent="Builder" unique_id=191714547]
+
+[node name="Info" type="Label" parent="Builder/Texts" unique_id=628890885]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 13
+
+[node name="Error" type="Label" parent="Builder/Texts" unique_id=711298418]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 13
+
+[node name="Level" type="Label" parent="Builder/Texts" unique_id=884946759]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 13
+
+[node name="Hint" type="Label" parent="Builder/Texts" unique_id=1222206840]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 13
+
+[node name="Test" type="Node" parent="." unique_id=875893446]
+script = ExtResource("5_8qrfl")
