@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace JustCity.Script.Level.Building.Road.Geometry;
@@ -128,11 +129,15 @@ public static class RoadGeometry
 
     public static Vector2[] Poly(Curve2D c)
     {
-        Vector2[] raw = c.Tessellate(5, 2f);
+        int n = c.PointCount;
+        if (n == 0) return [];
+        Vector2 o = c.GetPointPosition(0);
+        Curve2D local = new();
+        for (int i = 0; i < n; i++) local.AddPoint(c.GetPointPosition(i) - o, c.GetPointIn(i), c.GetPointOut(i));
+        Vector2[] raw = local.Tessellate(5, 2f);
         List<Vector2> pts = [];
-        foreach (Vector2 p in raw)
-            if (pts.Count == 0 || pts[^1].DistanceSquaredTo(p) > 1e-4f) pts.Add(p);
-        return pts.Count < 2 ? raw : [.. pts];
+        foreach (Vector2 p in raw) if (pts.Count == 0 || pts[^1].DistanceSquaredTo(p) > 1e-4f) pts.Add(p + o);
+        return pts.Count < 2 ? [.. raw.Select(p => p + o)] : [.. pts];
     }
 
     public static float Length(Vector2[] pts)
