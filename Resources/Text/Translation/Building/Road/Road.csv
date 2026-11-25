@@ -1,0 +1,20 @@
+keys,ru_ru,en_us
+ROAD_ERR_FLOW,Невозможно соединить дороги,Invalid road connection
+ROAD_ERR_ARMS,Недопустимое количество соединений,Invalid number of connected roads
+ROAD_ERR_ANGLE,Слишком острый угол соединения,Connection angle is too sharp
+ROAD_SNAP_LANE,Полоса,Lane
+ROAD_SNAP_END,Конец дороги,Road End
+ROAD_SNAP_NODE,Перекрёсток,Intersection
+ROAD_SNAP_ROAD,Дорога,Road
+ROAD_MODE_CLEAR,Режим удаления,Clear Mode
+ROAD_ERR_MONEY,Недостаточно средств,Not enough money
+ROAD_CLEAR_EMPTY,Нечего удалять,Nothing to remove
+ROAD_CLEAR_HINT,Выделите область для удаления дорог,Select an area to remove roads
+ROAD_PAR_PICK,Выберите дорогу для создания параллельной,Select a road to create a parallel road
+ROAD_PAR_HINT,Создайте параллельную дорогу рядом с существующей,Build a parallel road alongside an existing one
+ROAD_TURN_CLICK,Выберите перекрёсток,Select an intersection
+ROAD_TURN_MODE,Настройка поворотов,Turn Configuration
+ROAD_TURN_PICK_LANE,Выберите входящую полосу,Select an incoming lane
+ROAD_TURN_REMOVE,"Нажмите, чтобы удалить поворот",Click to remove turn
+ROAD_TURN_ADD,"Нажмите, чтобы добавить поворот",Click to add turn
+ROAD_TURN_HINT,Настройте разрешённые направления движения на перекрёстке,Configure permitted turning movements at the intersection

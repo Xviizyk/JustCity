@@ -23,11 +23,6 @@ public partial class RoadOverlay : Node2D
 
     private float px = 1f;
 
-    public override void _Ready()
-    {
-        if (Builder == null) GD.PushError("RoadOverlay: поле Builder нужно назначить в сцене.");
-    }
-
     public override void _Process(double delta)
     {
         if (Builder == null || !Builder.Active) HideLabels();
@@ -173,21 +168,13 @@ public partial class RoadOverlay : Node2D
             info += "  ·  " + build.Lanes + (build.OneWay ? "x1" : "x2");
             if (target != "") info += "  ·  " + target;
             CursorText(info, Ink, 0, shake);
-            if (build.Reason != null) CursorText(ReasonText(build.Reason), Bad, 1, shake);
+            if (build.Reason != null) CursorText(Utils.Tr(build.Reason), Bad, 1, shake);
         }
         else if (!build.Placing)
         {
             if (target != "") CursorText(target, Alpha(Ink, 0.6f), 0, shake);
             else if (Builder.LanesPerDirection > 1) CursorText(Builder.LanesPerDirection + "x2", Alpha(Ink, 0.45f), 0, shake);
         }
-    }
-
-    private static string ReasonText(string key)
-    {
-        if (key == "ROAD_ERR_FLOW") return Utils.Tr(key);
-        if (key == "ROAD_ERR_ARMS") return Utils.Tr(key);
-        if (key == "ROAD_ERR_ANGLE") return Utils.Tr(key);
-        return Utils.Tr(key);
     }
 
     private string Target(RoadSnap hover)
@@ -252,7 +239,7 @@ public partial class RoadOverlay : Node2D
         else if (parallel.Curve != null)
         {
             CursorText("$" + Builder.CostOf(parallel.Curve, Builder.LanesPerDirection, parallel.Reference.OneWay).ToString("0") + "  ·  " + parallel.Gap.ToString("0"), Ink);
-            if (parallel.Reason != null) CursorText(ReasonText(parallel.Reason), Bad, 1);
+            if (parallel.Reason != null) CursorText(Utils.Tr(parallel.Reason), Bad, 1);
         }
         ShowText(HintLabel, Utils.Tr("ROAD_PAR_HINT"), Alpha(Ink, 0.45f), HintPosition());
     }

@@ -89,7 +89,6 @@ public partial class RoadBuilder : Node2D
 	{
 		if (Renderer == null || Overlay == null)
 		{
-			GD.PushError("RoadBuilder: поля Renderer и Overlay нужно назначить в сцене.");
 			Active = false;
 			return;
 		}

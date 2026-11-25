@@ -14,7 +14,7 @@ public partial class RoadRenderer : Node2D
     public RoadGraph Network { get; set; }
     
     private static readonly Color ShadowColor = new(0f, 0f, 0f, 0.12f);
-    private static readonly Color OutlineColor = new(0f, 0f, 0f);
+    private static readonly Color OutlineColor = new(0.64f, 0.64f, 0.64f);
     private static readonly Color RoadColor = new(1f, 1f, 1f);
     private static readonly Color BridgeColor = new(0.84f, 0.84f, 0.86f);
     private static readonly Color CenterColor = new(0f, 0f, 0f, 0.9f);
