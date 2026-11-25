@@ -1,4 +1,5 @@
 using Godot;
+using JustCity.Script.Core;
 using JustCity.Script.Level.Building.Road.Tool;
 
 namespace JustCity.Script.Level.Player;
@@ -45,6 +46,16 @@ public partial class InputHandler : Node
     private bool _rightDown;
     private bool _rightPanned;
     private Vector2 _rightStart;
+
+    public override void _Process(double delta)
+    {
+        PlayerMovement.VerticalDirection = "None";
+        PlayerMovement.HorizontalDirection = "None";
+        if (Input.IsActionPressed(ActionMoveUp)) PlayerMovement.VerticalDirection = "Up";
+        else if (Input.IsActionPressed(ActionMoveDown)) PlayerMovement.VerticalDirection = "Down";
+        else if (Input.IsActionPressed(ActionMoveLeft)) PlayerMovement.HorizontalDirection = "Left";
+        else if (Input.IsActionPressed(ActionMoveRight)) PlayerMovement.HorizontalDirection = "Right";
+    }
 
     public override void _Input(InputEvent @event)
     {
@@ -98,8 +109,8 @@ public partial class InputHandler : Node
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        if (@event.IsActionPressed(ActionRedo, exactMatch: true)) { Builder.Redo(); MarkHandled(); return; }
-        if (@event.IsActionPressed(ActionUndo, exactMatch: true)) { Builder.Undo(); MarkHandled(); return; }
+        if (@event.IsActionPressed(ActionRedo, exactMatch: true) && this.IsDebug()) { Builder.Redo(); MarkHandled(); return; }
+        if (@event.IsActionPressed(ActionUndo, exactMatch: true) && this.IsDebug()) { Builder.Undo(); MarkHandled(); return; }
         if (@event.IsActionPressed(ActionEscape)) { Builder.Escape(); return; }
         if (@event.IsActionPressed(ActionToggleClear)) { Builder.ToggleClear(); return; }
         if (@event.IsActionPressed(ActionToggleParallel)) { Builder.ToggleParallel(); return; }
@@ -115,11 +126,6 @@ public partial class InputHandler : Node
             if (@event.IsActionPressed(ActionTool5)) { Builder.Type = BuildType.Smooth; return; }
             if (@event.IsActionPressed(ActionTool6)) { Builder.Type = BuildType.Smart; return; }
         }
-        PlayerMovement.Direction = "None";
-        if (@event.IsAction(ActionMoveUp)) { PlayerMovement.Direction = "Up"; return; }
-        if (@event.IsAction(ActionMoveDown)) { PlayerMovement.Direction = "Down"; return; }
-        if (@event.IsAction(ActionMoveLeft)) { PlayerMovement.Direction = "Left"; return; }
-        if (@event.IsAction(ActionMoveRight)) { PlayerMovement.Direction = "Right"; return; }
     }
 
     private void MarkHandled() => GetViewport().SetInputAsHandled();

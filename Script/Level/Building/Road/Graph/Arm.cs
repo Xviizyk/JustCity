@@ -12,6 +12,7 @@ public class Arm
     public Vector2 Out;
     public float Half;
     public float Reach;
+    public float Straight;
     public int In;
     public int Exit;
 
@@ -24,6 +25,7 @@ public class Arm
         Out = atEnd ? -RoadGeometry.EndTangent(edge.Curve) : RoadGeometry.StartTangent(edge.Curve);
         Half = edge.Width * 0.5f;
         Reach = edge.Curve.GetBakedLength();
+        Straight = StraightLength(edge.Curve, atEnd, Origin, Out, 0.5f);
         In = edge.OneWay && !atEnd ? 0 : edge.LanesPerDirection;
         Exit = edge.OneWay && atEnd ? 0 : edge.LanesPerDirection;
     }
@@ -35,6 +37,20 @@ public class Arm
         Out = direction;
         Half = half;
         Reach = reach;
+        Straight = reach;
+    }
+
+    private static float StraightLength(Curve2D c, bool atEnd, Vector2 origin, Vector2 dir, float tol)
+    {
+        float len = c.GetBakedLength();
+        Vector2 side = RoadGeometry.Left(dir);
+        const float step = 2f;
+        for (float s = step; s < len; s += step)
+        {
+            Vector2 p = c.SampleBaked(atEnd ? len - s : s);
+            if (Mathf.Abs((p - origin).Dot(side)) > tol) return s - step;
+        }
+        return len;
     }
 
     public bool Covers(Vector2 p)

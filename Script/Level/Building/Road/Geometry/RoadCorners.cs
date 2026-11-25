@@ -24,7 +24,15 @@ public static class RoadCorners
 
 			float ta = (edgeB - edgeA).Cross(b.Out) / den, tb = (edgeB - edgeA).Cross(a.Out) / den;
 			Vector2 corner = edgeA + a.Out * ta;
-			if (ta > 0f && tb > 0f) Fillet(a, b, corner, ta, tb, den, radius, tris, rims);
+			if (ta > 0f && tb > 0f)
+			{
+				if (!Fillet(a, b, corner, ta, tb, den, radius, tris, rims))
+				{
+					List<Vector2> fallback = [edgeA, corner, edgeB];
+					Fan(tris, node, fallback);
+					rims?.Add([.. fallback]);
+				}
+			}
 			else if (ta < 0f && tb < 0f)
 			{
 				float limit = 2f * Mathf.Max(a.Half, b.Half);
@@ -36,12 +44,12 @@ public static class RoadCorners
 		}
 	}
 
-	private static void Fillet(Arm a, Arm b, Vector2 corner, float ta, float tb, float sin, float radius, List<Vector2> tris, List<Vector2[]> rims)
+	private static bool Fillet(Arm a, Arm b, Vector2 corner, float ta, float tb, float sin, float radius, List<Vector2> tris, List<Vector2[]> rims)
 	{
 		float phi = Mathf.Atan2(sin, a.Out.Dot(b.Out));
 		float tan = Mathf.Tan(phi / 2f);
-		float touch = Mathf.Min(Mathf.Min(radius / tan, 2f * radius), Mathf.Min(a.Reach - ta, b.Reach - tb) * 0.8f);
-		if (touch < 1.5f) return;
+		float touch = Mathf.Min(Mathf.Min(radius / tan, 2f * radius), Mathf.Min(a.Straight - ta, b.Straight - tb) * 0.8f);
+		if (touch < 1.5f) return false;
 
 		float r = touch * tan;
 		Vector2 bisector = (a.Out + b.Out).Normalized();
@@ -56,6 +64,7 @@ public static class RoadCorners
 		rim.Add(touchB);
 		Fan(tris, corner - bisector * 1.5f, rim);
 		rims?.Add([.. rim]);
+		return true;
 	}
 
 	private static void Fan(List<Vector2> tris, Vector2 apex, List<Vector2> rim)

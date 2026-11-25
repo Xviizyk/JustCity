@@ -1,4 +1,5 @@
 using System;
+using System.Security;
 using Godot;
 using JustCity.Script.Core;
 using JustCity.Script.Core.Save;
@@ -17,7 +18,8 @@ public partial class Movement : Node
     [Export] public float KeyboardSpeed = 700.0f;
     [Export] public float ZoomPower = 0.85f;
     [Export] public int ZoomLevels = 20;
-    [Export] public string Direction;
+    [Export] public string VerticalDirection;
+    [Export] public string HorizontalDirection;
 
     [ExportGroup("Inertia")]
     [Export] public bool UseInertia = true;
@@ -129,11 +131,11 @@ public partial class Movement : Node
     private void KeyboardMove(double delta)
     {
         Vector2 dir = Vector2.Zero;
-        if (Direction == "None") return;
-        if (Direction == "Up") dir.Y -= 1f;
-        else if (Direction == "Down") dir.Y += 1f;
-        if (Direction == "Left") dir.X -= 1f;
-        else if (Direction == "Right") dir.X += 1f;
+        if (VerticalDirection == "None" && HorizontalDirection == "None") return;
+        if (VerticalDirection == "Up") dir.Y -= 1f;
+        else if (VerticalDirection == "Down") dir.Y += 1f;
+        if (HorizontalDirection == "Left") dir.X -= 1f;
+        else if (HorizontalDirection == "Right") dir.X += 1f;
 
         _inertia = Vector2.Zero;
         float speed = KeyboardSpeed * (InputHandlerer.IsShifting ? 2.5f : 1f);
@@ -185,7 +187,7 @@ public partial class Movement : Node
             _currentZoomLevel = Mathf.Lerp(_currentZoomLevel, _larpZoomLevel, l);
         }
 
-        float z = Mathf.Pow(ZoomPower, ZoomLevels - _currentZoomLevel);
+        float z = Mathf.Pow(ZoomPower, ZoomLevels - _currentZoomLevel) * 3;
         if (Mathf.IsEqualApprox(Camera.Zoom.X, z)) return;
 
         Viewport vp = GetViewport();
