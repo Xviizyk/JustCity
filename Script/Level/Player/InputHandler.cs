@@ -53,7 +53,7 @@ public partial class InputHandler : Node
         PlayerMovement.HorizontalDirection = "None";
         if (Input.IsActionPressed(ActionMoveUp)) PlayerMovement.VerticalDirection = "Up";
         else if (Input.IsActionPressed(ActionMoveDown)) PlayerMovement.VerticalDirection = "Down";
-        else if (Input.IsActionPressed(ActionMoveLeft)) PlayerMovement.HorizontalDirection = "Left";
+        if (Input.IsActionPressed(ActionMoveLeft)) PlayerMovement.HorizontalDirection = "Left";
         else if (Input.IsActionPressed(ActionMoveRight)) PlayerMovement.HorizontalDirection = "Right";
     }
 
@@ -71,25 +71,46 @@ public partial class InputHandler : Node
             GetViewport().SetInputAsHandled();
             return;
         }
-        if (@event.IsActionPressed(ActionBuild)) Builder.BuildPressed();
-        else if (@event.IsActionReleased(ActionBuild))
+
+        if (this.CurrentConfigData().LBMMovement)
         {
-            Builder.BuildReleased();
+            if (@event.IsActionPressed(ActionCancelOrPan)) Builder.BuildPressed();
+            else if (@event.IsActionReleased(ActionCancelOrPan)) Builder.BuildReleased();
+
+            else if (@event.IsActionPressed(ActionBuild))
+            {
+                _rightDown = true;
+                _rightPanned = false;
+                _rightStart = (@event as InputEventMouse)?.Position ?? GetViewport().GetMousePosition();
+            }
+            else if (@event.IsActionReleased(ActionBuild))
+            {
+                _rightDown = false;
+                PlayerMovement.IsMoving = false;
+                if (!_rightPanned) Builder.Back();
+            }
         }
-        else if (@event.IsActionPressed(ActionCameraPan)) PlayerMovement.IsMoving = true;
+        else
+        {
+            if (@event.IsActionPressed(ActionBuild)) Builder.BuildPressed();
+            else if (@event.IsActionReleased(ActionBuild)) Builder.BuildReleased();
+
+            else if (@event.IsActionPressed(ActionCancelOrPan))
+            {
+                _rightDown = true;
+                _rightPanned = false;
+                _rightStart = (@event as InputEventMouse)?.Position ?? GetViewport().GetMousePosition();
+            }
+            else if (@event.IsActionReleased(ActionCancelOrPan))
+            {
+                _rightDown = false;
+                PlayerMovement.IsMoving = false;
+                if (!_rightPanned) Builder.Back();
+            }
+        }
+
+        if (@event.IsActionPressed(ActionCameraPan)) PlayerMovement.IsMoving = true;
         else if (@event.IsActionReleased(ActionCameraPan)) PlayerMovement.IsMoving = false;
-        else if (@event.IsActionPressed(ActionCancelOrPan))
-        {
-            _rightDown = true;
-            _rightPanned = false;
-            _rightStart = (@event as InputEventMouse)?.Position ?? GetViewport().GetMousePosition();
-        }
-        else if (@event.IsActionReleased(ActionCancelOrPan))
-        {
-            _rightDown = false;
-            PlayerMovement.IsMoving = false;
-            if (!_rightPanned) Builder.Back();
-        }
         else if (@event.IsActionPressed(ActionShift)) IsShifting = true;
         else if (@event.IsActionPressed(ActionAlt)) IsAlting = true;
         else if (@event.IsActionReleased(ActionShift)) IsShifting = false;

@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b31004ywdmava"
+
+[deps]
+
+files=["res://Resources/Text/Translation/Building/Buildings/Buildings.ru.translation", "res://Resources/Text/Translation/Building/Buildings/Buildings.en.translation"]
+
+source_file="res://Resources/Text/Translation/Building/Buildings/Buildings.csv"
+dest_files=["res://Resources/Text/Translation/Building/Buildings/Buildings.ru.translation", "res://Resources/Text/Translation/Building/Buildings/Buildings.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
